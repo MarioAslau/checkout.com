@@ -59,21 +59,24 @@ export const SearchInput = styled.input`
 `;
 
 export const Select = styled.select`
-  padding: 0.5rem;
+  appearance: none;
+  padding: 0.5rem 2.25rem 0.5rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   outline: none;
   cursor: pointer;
+  line-height: 1.5;
+  min-width: 9.5rem;
 
   &:focus {
     border-color: rgb(61, 70, 83);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
-  }
-
-  @media (min-width: 768px) {
-    min-width: 120px;
   }
 `;
 
