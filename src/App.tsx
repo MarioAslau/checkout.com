@@ -1,21 +1,14 @@
+import { useState } from "react";
+import { Provider } from "react-redux";
 import { I18N } from "./constants/i18n";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PaymentsPage } from "./components/PaymentsPage";
-
-// This is required for tests to pass if ReactQuery is used
-// you don't have to use this library in your solution.
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // disable retries is required for tests to pass if ReactQuery is used
-      retry: false,
-    },
-  },
-});
+import { makeStore } from "./store/store";
 
 function App() {
+  const [store] = useState(() => makeStore());
+
   return (
-    <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
       <div className="min-h-screen bg-gray-50">
         <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -26,7 +19,7 @@ function App() {
           <PaymentsPage />
         </main>
       </div>
-    </QueryClientProvider>
+    </Provider>
   );
 }
 
