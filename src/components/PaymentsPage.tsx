@@ -4,6 +4,7 @@ import { useAppSelector } from "../store/hooks";
 import { selectPaymentQueryArgs } from "../features/payments/paymentFiltersSlice";
 import { useGetPaymentsQuery } from "../features/payments/paymentsApi";
 import { PaymentsTable } from "./PaymentsTable";
+import { PaymentsFilters } from "./PaymentsFilters";
 
 export const PaymentsPage = () => {
   const queryArgs = useAppSelector(selectPaymentQueryArgs);
@@ -31,6 +32,7 @@ export const PaymentsPage = () => {
   return (
     <Container>
       <Title>{I18N.PAGE_TITLE}</Title>
+      <PaymentsFilters />
       {content}
     </Container>
   );
