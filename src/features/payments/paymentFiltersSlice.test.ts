@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { DEFAULT_PAGE_SIZE } from "../../constants";
-import type { RootState } from "../../store/store";
+import { makeStore, type RootState } from "../../store/store";
 import {
   currencyChanged,
   filtersCleared,
@@ -15,7 +15,7 @@ import {
 } from "./paymentFiltersSlice";
 
 function root(paymentFilters: PaymentFiltersState): RootState {
-  return { paymentFilters };
+  return makeStore({ paymentFilters }).getState();
 }
 
 test("typing does not change the applied search", () => {
