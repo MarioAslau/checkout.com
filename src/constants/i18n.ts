@@ -35,6 +35,7 @@ export const I18N = {
   PAYMENT_NOT_FOUND: "Payment not found.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
   SOMETHING_WENT_WRONG: "Something went wrong!",
+  LOADING: "Loading payments",
   
   // Fallback values
   EMPTY_CUSTOMER: "—",
