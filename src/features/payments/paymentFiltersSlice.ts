@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { DEFAULT_PAGE_SIZE, type Currency } from "../../constants";
 import type { PaymentQueryArgs } from "../../types/payment";
 import type { RootState } from "../../store/store";
@@ -62,13 +62,16 @@ export const selectPage = (state: RootState) => state.paymentFilters.page;
 export const selectHasActiveFilters = (state: RootState) =>
   state.paymentFilters.search !== "" || state.paymentFilters.currency !== "";
 
-export const selectPaymentQueryArgs = (state: RootState): PaymentQueryArgs => {
-  const { search, currency, page } = state.paymentFilters;
+export const selectPaymentQueryArgs = createSelector(
+  [(state: RootState) => state.paymentFilters],
+  (filters): PaymentQueryArgs => {
+    const { search, currency, page } = filters;
 
-  return {
-    page,
-    pageSize: DEFAULT_PAGE_SIZE,
-    ...(search === "" ? {} : { search }),
-    ...(currency === "" ? {} : { currency }),
-  };
-};
+    return {
+      page,
+      pageSize: DEFAULT_PAGE_SIZE,
+      ...(search === "" ? {} : { search }),
+      ...(currency === "" ? {} : { currency }),
+    };
+  },
+);
