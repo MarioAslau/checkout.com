@@ -10,8 +10,13 @@ one is small enough to review in a few minutes.
 1. **Agent** implements the ticket. Scope and acceptance criteria only.
 2. **Agent** runs the automated checks and reports: files changed, command
    output, deviations. Then the agent **stops**.
-3. **Daniel** runs the manual checks in the browser (`npm run dev`).
-4. **Daniel** ticks the sign-off box, commits, and pushes.
+3. In that same report, the agent gives a **PR title** and **description**
+   to copy into the pull request. Follow `.agents/PULL_REQUESTS.md`.
+   Fill it from this ticket and the commands that actually ran. Do not open
+   the pull request.
+4. **Daniel** runs the manual checks in the browser (`npm run dev`).
+5. **Daniel** ticks the sign-off box, commits, and pushes. The manual checks
+   in the description stay unchecked until he has run them.
 
 A ticket is not done until it's signed off. If a ticket depends on a
 **Proposed** ADR, Daniel accepts or changes that ADR before work starts.
@@ -27,7 +32,7 @@ npm run lint            # no lint errors in files you touched
 
 | Tip | Where it's covered |
 |---|---|
-| Start with Step 1 and work through incrementally | Tickets follow steps 1→8. T01–T05 are small prep tickets for Step 1. |
+| Start with Step 1 and work through incrementally | Tickets follow steps 1→8. T01–T05 are small prep tickets for Step 1. T00b is folded into T01. |
 | Run tests after each step | "Run before every sign-off", above, plus each ticket's `test:stepN` |
 | Keep accessibility in mind | ADR-10; a11y criteria in T06 (header scope, button focus), T07, T08, T10, T11, T13 (page label); keyboard and screen-reader pass in T14 |
 | Use TypeScript effectively | ADR-08; T01 (types), T02 (typed hooks), T04 (error type guards), T11 (currency type guard), T14 (no `any`) |
@@ -59,8 +64,10 @@ npm run lint            # no lint errors in files you touched
 
 ---
 
-## T00b — README
-**Depends on:** T00
+## T01 — README, types, and constants
+**Depends on:** T00  **ADRs:** 08
+
+Former T00b and T01, done as one ticket.
 
 **Scope**
 - Rename Checkout's `README.md` to `CHALLENGE.md` with `git mv`, so git keeps
@@ -68,40 +75,27 @@ npm run lint            # no lint errors in files you touched
   the root.
 - Write a new `README.md` with:
   - a one-line summary, linking to `CHALLENGE.md` for the brief
-  - prerequisites: Node version from `.nvmrc`
+  - prerequisites: Node.js 20. There is no `.nvmrc` in the repo.
   - how to install, run the app, run the tests (all, and per step), lint and
     type-check
   - the test payment IDs (`pay_134_*`, `pay_205_*`, `pay_404`, `pay_500`)
   - placeholder headings for **Structure**, **Decisions**, **Trade-offs** and
     **Next steps**, filled in at T14
-
-**Acceptance criteria**
-- [ ] Every command in the README runs as written on a fresh clone.
-- [ ] Nothing from the original brief is lost; it's all in `CHALLENGE.md`.
-
-**Manual checks**
-- [ ] The README renders properly on GitHub after you push. Check the
-      `CHALLENGE.md` link and the images inside it.
-
-**Sign-off:** ☐ Daniel — date: ____
-
----
-
-## T01 — Types and constants
-**Depends on:** T00  **ADRs:** 08
-
-**Scope**
 - Fill in `Payment` and `PaymentSearchResponse` in `src/types/payment.ts`.
 - Add `PaymentQueryArgs`: `{ search?, currency?, page, pageSize }`.
 - Make `CURRENCIES` `as const`, export `type Currency`, and add
   `DEFAULT_PAGE_SIZE = 5`.
 
 **Acceptance criteria**
+- [ ] Every command in the README runs as written on a fresh clone.
+- [ ] Nothing from the original brief is lost; it's all in `CHALLENGE.md`.
 - [ ] `npx tsc -b` passes, including `mockPaymentsData.ts`, which imports
       `Payment`.
 - [ ] No `any` in the new types.
 
 **Manual checks**
+- [ ] The README renders properly on GitHub after you push. Check the
+      `CHALLENGE.md` link and the images inside it.
 - [ ] Read the types against one mock payment and one API response from
       `CHALLENGE.md`.
 
@@ -422,13 +416,13 @@ together, and that changing one keeps the other.
 - `npm run lint` and `npx tsc -b` are clean across the repo, including the
   `any` in `mocks/handlers.ts`. Do not edit `App.test.tsx`. The unused catch
   in that file stays.
-- Fill in the README headings left as placeholders in T00b:
+- Fill in the README headings left as placeholders in T01:
   - Structure
   - Decisions: summarise the accepted ADRs in plain words, including why Redux
     Toolkit
   - Trade-offs
   - Next steps: the follow-ups at the end of this plan
-- Update the run instructions if anything changed since T00b.
+- Update the run instructions if anything changed since T01.
 
 **Acceptance criteria**
 - [ ] All tests pass. `npm run build` succeeds.
