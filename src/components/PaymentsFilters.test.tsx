@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { afterAll, afterEach, beforeAll, expect, test } from "vitest";
 import { setupServer } from "msw/node";
@@ -140,6 +140,53 @@ test("Clear resets the currency select", async () => {
   fireEvent.click(screen.getByRole("button", { name: I18N.CLEAR_FILTERS }));
 
   expect(select).toHaveValue("");
+});
+
+test("pay_205 and EUR are sent together, and changing one keeps the other", async () => {
+  const queries: Array<{ search: string | null; currency: string | null }> = [];
+
+  server.events.on("request:start", ({ request }) => {
+    const url = new URL(request.url);
+    if (url.pathname.endsWith("/api/payments")) {
+      queries.push({
+        search: url.searchParams.get("search"),
+        currency: url.searchParams.get("currency"),
+      });
+    }
+  });
+
+  render(<App />);
+
+  const searchInput = screen.getByPlaceholderText(I18N.SEARCH_PLACEHOLDER);
+  const select = screen.getByRole("combobox", { name: I18N.CURRENCY_FILTER_LABEL });
+
+  fireEvent.change(searchInput, { target: { value: "pay_205" } });
+  fireEvent.click(screen.getByRole("button", { name: I18N.SEARCH_BUTTON }));
+  fireEvent.change(select, { target: { value: "EUR" } });
+
+  expect(await screen.findByText("pay_205_13")).toBeInTheDocument();
+  expect(screen.getByText("pay_205_2")).toBeInTheDocument();
+  expect(queries).toContainEqual({ search: "pay_205", currency: "EUR" });
+
+  const rows = screen.getAllByRole("row").slice(1);
+  expect(rows).toHaveLength(2);
+  for (const row of rows) {
+    expect(row).toHaveTextContent("EUR");
+  }
+
+  fireEvent.change(select, { target: { value: "USD" } });
+  await screen.findByText("pay_205_1");
+  expect(searchInput).toHaveValue("pay_205");
+  expect(queries).toContainEqual({ search: "pay_205", currency: "USD" });
+
+  fireEvent.change(searchInput, { target: { value: "pay_134" } });
+  fireEvent.click(screen.getByRole("button", { name: I18N.SEARCH_BUTTON }));
+
+  await waitFor(() => {
+    expect(queries).toContainEqual({ search: "pay_134", currency: "USD" });
+  });
+  expect(select).toHaveValue("USD");
+  expect(await screen.findByText("pay_134_1")).toBeInTheDocument();
 });
 
 test("an applied currency shows the clear button", () => {
