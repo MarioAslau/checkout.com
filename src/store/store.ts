@@ -1,12 +1,8 @@
-import { combineReducers, configureStore, type Reducer } from "@reduxjs/toolkit";
-
-type PlaceholderState = Record<string, never>;
-
-// configureStore rejects an empty reducer map. T03 and T04 replace this.
-const placeholderReducer: Reducer<PlaceholderState> = (state = {}) => state;
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { paymentFiltersReducer } from "../features/payments/paymentFiltersSlice";
 
 const rootReducer = combineReducers({
-  app: placeholderReducer,
+  paymentFilters: paymentFiltersReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
