@@ -129,3 +129,103 @@ test("clearing after an error brings the table back", async () => {
   expect(await screen.findByRole("table")).toBeInTheDocument();
   expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 });
+
+function payment(id: string): Payment {
+  return {
+    id,
+    amount: 10,
+    customerAddress: "1 Test St",
+    status: "completed",
+    date: "2024-04-15T10:00:00Z",
+    description: "Paged payment",
+    currency: "USD",
+    customerName: "Ada",
+  };
+}
+
+test("Next opens page 2 and Previous returns to page 1", async () => {
+  render(<App />);
+  await screen.findByText("pay_134_1");
+
+  fireEvent.click(screen.getByRole("button", { name: I18N.NEXT_BUTTON }));
+
+  expect(await screen.findByText("pay_456_1")).toBeInTheDocument();
+  expect(screen.queryByText("pay_134_1")).not.toBeInTheDocument();
+  expect(screen.getByText(`${I18N.PAGE_LABEL} 2`)).toBeInTheDocument();
+
+  const previous = screen.getByRole("button", { name: I18N.PREVIOUS_BUTTON });
+  expect(previous).toBeEnabled();
+  fireEvent.click(previous);
+
+  expect(await screen.findByText("pay_134_1")).toBeInTheDocument();
+  expect(screen.queryByText("pay_456_1")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: I18N.PREVIOUS_BUTTON })).toBeDisabled();
+});
+
+test("Next is disabled when the search has exactly one page", async () => {
+  render(<App />);
+
+  fireEvent.change(screen.getByPlaceholderText(I18N.SEARCH_PLACEHOLDER), {
+    target: { value: "pay_134" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: I18N.SEARCH_BUTTON }));
+
+  expect(await screen.findByText("pay_134_5")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: I18N.NEXT_BUTTON })).toBeDisabled();
+  expect(screen.getByText(`${I18N.PAGE_LABEL} 1`)).toBeInTheDocument();
+});
+
+test("changing a filter on page 2 returns to page 1", async () => {
+  const queries: Array<{ page: string | null; currency: string | null }> = [];
+
+  server.events.on("request:start", ({ request }) => {
+    const url = new URL(request.url);
+    if (url.pathname.endsWith("/api/payments")) {
+      queries.push({
+        page: url.searchParams.get("page"),
+        currency: url.searchParams.get("currency"),
+      });
+    }
+  });
+
+  render(<App />);
+  await screen.findByText("pay_134_1");
+  fireEvent.click(screen.getByRole("button", { name: I18N.NEXT_BUTTON }));
+  await screen.findByText("pay_456_1");
+
+  fireEvent.change(screen.getByRole("combobox", { name: I18N.CURRENCY_FILTER_LABEL }), {
+    target: { value: "USD" },
+  });
+
+  expect(await screen.findByText(`${I18N.PAGE_LABEL} 1`)).toBeInTheDocument();
+  expect(queries).toContainEqual({ page: "1", currency: "USD" });
+  expect(screen.getByRole("button", { name: I18N.PREVIOUS_BUTTON })).toBeDisabled();
+});
+
+test("a slow earlier page does not replace a later page", async () => {
+  server.use(
+    http.get("*/api/payments", async ({ request }) => {
+      const page = Number(new URL(request.url).searchParams.get("page") ?? "1");
+      await delay(page === 2 ? 400 : 20);
+      return HttpResponse.json({
+        payments: [payment(`page-${page}`)],
+        total: 20,
+        page,
+        pageSize: 5,
+      });
+    }),
+  );
+
+  render(<App />);
+  await screen.findByText("page-1");
+
+  fireEvent.click(screen.getByRole("button", { name: I18N.NEXT_BUTTON }));
+  fireEvent.click(screen.getByRole("button", { name: I18N.NEXT_BUTTON }));
+
+  expect(await screen.findByText("page-3")).toBeInTheDocument();
+  await delay(500);
+
+  expect(screen.queryByText("page-2")).not.toBeInTheDocument();
+  expect(screen.getByText("page-3")).toBeInTheDocument();
+  expect(screen.getByText(`${I18N.PAGE_LABEL} 3`)).toBeInTheDocument();
+});
