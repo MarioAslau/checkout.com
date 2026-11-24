@@ -5,6 +5,7 @@ import { setupServer } from "msw/node";
 import App from "../App";
 import { I18N } from "../constants/i18n";
 import { handlers } from "../mocks/handlers";
+import { CURRENCIES } from "../constants";
 import { PaymentsFilters } from "./PaymentsFilters";
 import { renderWithProviders } from "../test/renderWithProviders";
 import { initialState } from "../features/payments/paymentFiltersSlice";
@@ -97,6 +98,48 @@ test("page 2 with no applied filters does not show the clear button", () => {
   });
 
   expect(queryClearButton()).not.toBeInTheDocument();
+});
+
+test("selecting USD sends currency=USD and shows it on every row", async () => {
+  const currencies: Array<string | null> = [];
+
+  server.events.on("request:start", ({ request }) => {
+    const url = new URL(request.url);
+    if (url.pathname.endsWith("/api/payments")) {
+      currencies.push(url.searchParams.get("currency"));
+    }
+  });
+
+  render(<App />);
+
+  const select = screen.getByRole("combobox", { name: I18N.CURRENCY_FILTER_LABEL });
+  expect(screen.getByRole("option", { name: I18N.CURRENCIES_OPTION })).toHaveValue("");
+  for (const code of CURRENCIES) {
+    expect(screen.getByRole("option", { name: code })).toBeInTheDocument();
+  }
+
+  fireEvent.change(select, { target: { value: "USD" } });
+
+  await screen.findByRole("table");
+  expect(currencies).toContain("USD");
+
+  const rows = screen.getAllByRole("row").slice(1);
+  expect(rows.length).toBeGreaterThan(0);
+  for (const row of rows) {
+    expect(row).toHaveTextContent("USD");
+  }
+});
+
+test("Clear resets the currency select", async () => {
+  render(<App />);
+
+  const select = screen.getByRole("combobox", { name: I18N.CURRENCY_FILTER_LABEL });
+  fireEvent.change(select, { target: { value: "USD" } });
+  expect(await screen.findByRole("button", { name: I18N.CLEAR_FILTERS })).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: I18N.CLEAR_FILTERS }));
+
+  expect(select).toHaveValue("");
 });
 
 test("an applied currency shows the clear button", () => {
