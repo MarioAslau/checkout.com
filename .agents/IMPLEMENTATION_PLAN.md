@@ -3,6 +3,8 @@
 Read `AGENTS.md` and `.agents/ARCHITECTURE.md` first. Tickets go in order. Each
 one is small enough to review in a few minutes.
 
+**Status:** T00–T14 are complete and merged to `main` on 2026-11-24.
+
 > **ADR-01 is Accepted: RTK Query.** T02, T04, T06 and T13 are written for that.
 
 ## Workflow for every ticket
@@ -53,14 +55,14 @@ npm run lint            # no lint errors in files you touched
   browser console.
 
 **Acceptance criteria**
-- [ ] `git status` shows no `node_modules` or `junit.xml`.
-- [ ] `npx vitest run` runs. All 11 tests fail, which is expected at this point.
+- [x] `git status` shows no `node_modules` or `junit.xml`.
+- [x] `npx vitest run` runs. All 11 tests fail, which is expected at this point.
 
 **Manual checks**
-- [ ] The page shows "Start here".
-- [ ] DevTools console: MSW started.
+- [x] The page shows "Start here".
+- [x] DevTools console: MSW started.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -87,19 +89,19 @@ Former T00b and T01, done as one ticket.
   `DEFAULT_PAGE_SIZE = 5`.
 
 **Acceptance criteria**
-- [ ] Every command in the README runs as written on a fresh clone.
-- [ ] Nothing from the original brief is lost; it's all in `CHALLENGE.md`.
-- [ ] `npx tsc -b` passes, including `mockPaymentsData.ts`, which imports
+- [x] Every command in the README runs as written on a fresh clone.
+- [x] Nothing from the original brief is lost; it's all in `CHALLENGE.md`.
+- [x] `npx tsc -b` passes, including `mockPaymentsData.ts`, which imports
       `Payment`.
-- [ ] No `any` in the new types.
+- [x] No `any` in the new types.
 
 **Manual checks**
-- [ ] The README renders properly on GitHub after you push. Check the
+- [x] The README renders properly on GitHub after you push. Check the
       `CHALLENGE.md` link and the images inside it.
-- [ ] Read the types against one mock payment and one API response from
+- [x] Read the types against one mock payment and one API response from
       `CHALLENGE.md`.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -122,16 +124,16 @@ Former T00b and T01, done as one ticket.
 The store is empty in this ticket. The slices are added in T03 and T04.
 
 **Acceptance criteria**
-- [ ] `npx tsc -b` and `npm run lint` pass.
-- [ ] A smoke test renders `<App />` with `renderWithProviders` and finds the
+- [x] `npx tsc -b` and `npm run lint` pass.
+- [x] A smoke test renders `<App />` with `renderWithProviders` and finds the
       title.
-- [ ] `package.json` has no unused state or HTTP libraries.
+- [x] `package.json` has no unused state or HTTP libraries.
 
 **Manual checks**
-- [ ] The Redux DevTools browser extension shows the store.
-- [ ] Read `App.tsx`: the store is not created at module level.
+- [x] The Redux DevTools browser extension shows the store.
+- [x] Read `App.tsx`: the store is not created at module level.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -152,21 +154,21 @@ The store is empty in this ticket. The slices are added in T03 and T04.
 - Register the slice in `makeStore`.
 
 **Acceptance criteria** (unit tests, no rendering)
-- [ ] Typing (`searchInputChanged`) doesn't change the applied `search`.
-- [ ] `searchSubmitted` trims the draft, applies it, and resets `page` to 1.
-- [ ] `currencyChanged` applies the currency immediately and resets `page`
+- [x] Typing (`searchInputChanged`) doesn't change the applied `search`.
+- [x] `searchSubmitted` trims the draft, applies it, and resets `page` to 1.
+- [x] `currencyChanged` applies the currency immediately and resets `page`
       to 1.
-- [ ] `pageChanged` never goes below 1.
-- [ ] `filtersCleared` returns the initial state.
-- [ ] `selectHasActiveFilters` is false for unsaved input and for page 2 with
+- [x] `pageChanged` never goes below 1.
+- [x] `filtersCleared` returns the initial state.
+- [x] `selectHasActiveFilters` is false for unsaved input and for page 2 with
       no search or currency, and true when `search` or `currency` is applied.
-- [ ] `selectPaymentQueryArgs` has no empty `search` or `currency`, and always
+- [x] `selectPaymentQueryArgs` has no empty `search` or `currency`, and always
       has `page` and `pageSize`.
 
 **Manual checks**
-- [ ] Read the reducers. Could you explain each one in the review?
+- [x] Read the reducers. Could you explain each one in the review?
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -183,15 +185,15 @@ The store is empty in this ticket. The slices are added in T03 and T04.
   `FetchBaseQueryError` and `SerializedError`, mapped as in ADR-06.
 
 **Acceptance criteria**
-- [ ] Test with MSW: the request URL has `page=1&pageSize=5` and no `search=`
+- [x] Test with MSW: the request URL has `page=1&pageSize=5` and no `search=`
       or `currency=` when they're empty. This confirms the ADR-02 assumptions.
-- [ ] Unit tests: 404, 500, 503, 401, `FETCH_ERROR` and `SerializedError` each
+- [x] Unit tests: 404, 500, 503, 401, `FETCH_ERROR` and `SerializedError` each
       map to the right message.
 
 **Manual checks**
-- [ ] Redux DevTools shows the `paymentsApi` cache entry after load.
+- [x] Redux DevTools shows the `paymentsApi` cache entry after load.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -201,13 +203,13 @@ The store is empty in this ticket. The slices are added in T03 and T04.
 **Scope:** `src/utils/format.ts` with `formatAmount` and `formatDate`.
 
 **Acceptance criteria**
-- [ ] Unit tests: `250 → "250.00"`, `150.5 → "150.50"`, `85.25 → "85.25"`.
-- [ ] `formatDate` returns the same output as the test helper's `formattedDate`.
+- [x] Unit tests: `250 → "250.00"`, `150.5 → "150.50"`, `85.25 → "85.25"`.
+- [x] `formatDate` returns the same output as the test helper's `formattedDate`.
 
 **Manual checks**
-- [ ] Compare against the date and amount columns in `docs/payments_page.png`.
+- [x] Compare against the date and amount columns in `docs/payments_page.png`.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -227,15 +229,15 @@ The store is empty in this ticket. The slices are added in T03 and T04.
   and renders the title and the table.
 
 **Acceptance criteria**
-- [ ] `npm run test:step1` passes.
-- [ ] The first request sends `page=1&pageSize=5`.
+- [x] `npm run test:step1` passes.
+- [x] The first request sends `page=1&pageSize=5`.
 
 **Manual checks**
-- [ ] Matches `docs/payments_page.png`: title, columns, badge colours, 2-decimal
+- [x] Matches `docs/payments_page.png`: title, columns, badge colours, 2-decimal
       amounts.
-- [ ] No React or styled-components warnings in the console.
+- [x] No React or styled-components warnings in the console.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -253,15 +255,15 @@ The store is empty in this ticket. The slices are added in T03 and T04.
   the error state in T10.
 
 **Acceptance criteria**
-- [ ] A test asserts the loading state shows before the data arrives.
-- [ ] A test asserts the empty state, using an MSW override that returns
+- [x] A test asserts the loading state shows before the data arrives.
+- [x] A test asserts the empty state, using an MSW override that returns
       `payments: []`.
 
 **Manual checks**
-- [ ] DevTools → Network → throttle to "Slow 3G": the spinner shows, then the
+- [x] DevTools → Network → throttle to "Slow 3G": the spinner shows, then the
       table.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -276,18 +278,18 @@ The store is empty in this ticket. The slices are added in T03 and T04.
 - Submit tests use `fireEvent`, not `@testing-library/user-event`.
 
 **Acceptance criteria**
-- [ ] `npm run test:step2` passes.
-- [ ] Test: typing alone sends no request.
-- [ ] Test: Enter submits.
-- [ ] Test: whitespace is trimmed.
+- [x] `npm run test:step2` passes.
+- [x] Test: typing alone sends no request.
+- [x] Test: Enter submits.
+- [x] Test: whitespace is trimmed.
 
 **Manual checks**
-- [ ] Matches `docs/search_by_payment_id_with_search.png`.
-- [ ] Searching `pay_134_1` shows exactly one row.
-- [ ] Redux DevTools: typing logs `searchInputChanged`, and Search logs
+- [x] Matches `docs/search_by_payment_id_with_search.png`.
+- [x] Searching `pay_134_1` shows exactly one row.
+- [x] Redux DevTools: typing logs `searchInputChanged`, and Search logs
       `searchSubmitted`.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -301,14 +303,14 @@ The store is empty in this ticket. The slices are added in T03 and T04.
 - Clicking it dispatches `filtersCleared`.
 
 **Acceptance criteria**
-- [ ] `npm run test:step3` passes.
-- [ ] Test: the button is hidden on first load and hidden again after clearing.
+- [x] `npm run test:step3` passes.
+- [x] Test: the button is hidden on first load and hidden again after clearing.
 
 **Manual checks**
-- [ ] Matches `docs/clear_filters.png`.
-- [ ] After clearing, the unfiltered list comes back.
+- [x] Matches `docs/clear_filters.png`.
+- [x] After clearing, the unfiltered list comes back.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -322,17 +324,17 @@ The store is empty in this ticket. The slices are added in T03 and T04.
   new request fails (ADR-01 gotcha).
 
 **Acceptance criteria**
-- [ ] `npm run test:step4` and `npm run test:step5` pass.
-- [ ] Test: searching `401` shows `SOMETHING_WENT_WRONG`.
-- [ ] Test: after a successful load, searching `pay_404` shows the error and
+- [x] `npm run test:step4` and `npm run test:step5` pass.
+- [x] Test: searching `401` shows `SOMETHING_WENT_WRONG`.
+- [x] Test: after a successful load, searching `pay_404` shows the error and
       **no table**. This proves the stale data isn't shown.
-- [ ] Test: clearing after an error brings the table back.
+- [x] Test: clearing after an error brings the table back.
 
 **Manual checks**
-- [ ] Matches `docs/payment_not_found.png` and `docs/internal_server_error.png`.
-- [ ] The Clear button is visible in the error state.
+- [x] Matches `docs/payment_not_found.png` and `docs/internal_server_error.png`.
+- [x] The Clear button is visible in the error state.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -348,15 +350,15 @@ The store is empty in this ticket. The slices are added in T03 and T04.
 - `filtersCleared` already resets it.
 
 **Acceptance criteria**
-- [ ] `npm run test:step6` passes.
-- [ ] Test: the request carries `currency=USD`.
-- [ ] Test: Clear resets the select to `""`.
+- [x] `npm run test:step6` passes.
+- [x] Test: the request carries `currency=USD`.
+- [x] Test: Clear resets the select to `""`.
 
 **Manual checks**
-- [ ] Matches `docs/filter_by_currency.png`.
-- [ ] Every row shows the selected currency.
+- [x] Matches `docs/filter_by_currency.png`.
+- [x] Every row shows the selected currency.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -367,14 +369,14 @@ The store is empty in this ticket. The slices are added in T03 and T04.
 together, and that changing one keeps the other.
 
 **Acceptance criteria**
-- [ ] `npm run test:step7` passes.
-- [ ] Test: `pay_205` + `EUR` sends both params, and every row is EUR.
+- [x] `npm run test:step7` passes.
+- [x] Test: `pay_205` + `EUR` sends both params, and every row is EUR.
 
 **Manual checks**
-- [ ] Matches `docs/filter_by_payment_id_and_currency.png`: `pay_205_2` and
+- [x] Matches `docs/filter_by_payment_id_and_currency.png`: `pay_205_2` and
       `pay_205_13`.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -392,20 +394,20 @@ together, and that changing one keeps the other.
   with `aria-live="polite"`. Not "Page N of M".
 
 **Acceptance criteria**
-- [ ] `npm run test:step8` passes.
-- [ ] Test: Next → page 2 shows different rows. Previous is enabled and goes
+- [x] `npm run test:step8` passes.
+- [x] Test: Next → page 2 shows different rows. Previous is enabled and goes
       back.
-- [ ] Test: Next is disabled for `pay_134`, which has exactly 5 results.
-- [ ] Test: changing a filter on page 2 goes back to page 1.
+- [x] Test: Next is disabled for `pay_134`, which has exactly 5 results.
+- [x] Test: changing a filter on page 2 goes back to page 1.
 
 **Manual checks**
-- [ ] Matches `docs/paginate_payments_page_1.png` and `_2.png`.
-- [ ] Going back to page 1 is instant, served from the RTK Query cache. Check
+- [x] Matches `docs/paginate_payments_page_1.png` and `_2.png`.
+- [x] Going back to page 1 is instant, served from the RTK Query cache. Check
       the Network tab: no new request.
-- [ ] Click Next quickly several times: no flicker, and no page skipped or
+- [x] Click Next quickly several times: no flicker, and no page skipped or
       shown out of order.
 
-**Sign-off:** ☐ Daniel — date: ____
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
@@ -425,29 +427,21 @@ together, and that changing one keeps the other.
 - Update the run instructions if anything changed since T01.
 
 **Acceptance criteria**
-- [ ] All tests pass. `npm run build` succeeds.
-- [ ] The README describes what was actually built. Nothing is listed that
+- [x] All tests pass. `npm run build` succeeds.
+- [x] The README describes what was actually built. Nothing is listed that
       isn't in the code.
 
 **Manual checks**
-- [ ] Go through every screenshot in `docs/` once more.
-- [ ] Keyboard-only pass: Tab through input → select → Search → Clear →
+- [x] Go through every screenshot in `docs/` once more.
+- [x] Keyboard-only pass: Tab through input → select → Search → Clear →
       Previous → Next. Every element has a visible focus ring, and Enter/Space
       work.
-- [ ] Screen reader pass (VoiceOver: Cmd+F5). The input and select read their
+- [x] Screen reader pass (VoiceOver: Cmd+F5). The input and select read their
       labels, errors are announced, and the page number is announced on Next.
-- [ ] Run the test IDs by hand: `pay_134_1`, `pay_205` + EUR, `pay_404`,
+- [x] Run the test IDs by hand: `pay_134_1`, `pay_205` + EUR, `pay_404`,
       `pay_500`, `401`.
 
-**Sign-off:** ☐ Daniel — date: ____
-
----
-
-## T15 — Submit
-- [ ] Fresh clone of your repo → `npm ci` → `npx vitest run` passes.
-- [ ] The repo link opens in a logged-out browser window (or the reviewer has
-      been given access).
-- [ ] Submitted at least one working day before the interview.
+**Sign-off:** ☑ 2026-11-24
 
 ---
 
