@@ -232,6 +232,11 @@ export const PaginationButton = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+  }
 `;
 
 export const TableHeaderWrapper = styled.thead`
