@@ -13,6 +13,8 @@ change. Design references are in `docs/*.png`.
    - the files you changed
    - the commands you ran and their output
    - anything you were unsure about or deviated from
+   - a PR title and description, filled from `.agents/PULL_REQUESTS.md`, ready
+     to copy into the pull request. Do not open the pull request.
 4. **Never edit `src/App.test.tsx`.** It is Checkout's scoring suite.
 5. Don't add dependencies without asking.
 6. Every user-facing string comes from `I18N` in `src/constants/i18n.ts`. If a
@@ -23,9 +25,9 @@ change. Design references are in `docs/*.png`.
    "Follow-ups" in your report. Don't fix it.
 9. If a ticket conflicts with `.agents/ARCHITECTURE.md`, the architecture file
    wins. Flag the conflict.
-10. When Daniel asks for a PR title or description, read
-    `.agents/PULL_REQUESTS.md` and fill it from the ticket and the commands
-    that actually ran. Do not open the pull request unless he asks.
+10. Every finished ticket includes the PR title and description from
+    `.agents/PULL_REQUESTS.md`, filled from the ticket and the commands that
+    actually ran. Do not open the pull request unless asked in that message.
 
 ## Commands
 
