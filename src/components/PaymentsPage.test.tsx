@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { afterAll, afterEach, beforeAll, expect, test } from "vitest";
 import { delay, http, HttpResponse } from "msw";
@@ -90,4 +90,42 @@ test("shows the empty state when the response has no payments", async () => {
 
   expect(await screen.findByText(I18N.NO_PAYMENTS_FOUND)).toBeInTheDocument();
   expect(screen.queryByRole("table")).not.toBeInTheDocument();
+});
+
+function searchFor(value: string) {
+  fireEvent.change(screen.getByPlaceholderText(I18N.SEARCH_PLACEHOLDER), {
+    target: { value },
+  });
+  fireEvent.click(screen.getByRole("button", { name: I18N.SEARCH_BUTTON }));
+}
+
+test("searching 401 shows something went wrong", async () => {
+  render(<App />);
+
+  searchFor("401");
+
+  expect(await screen.findByRole("alert")).toHaveTextContent(I18N.SOMETHING_WENT_WRONG);
+});
+
+test("a failed search replaces the table instead of keeping the previous rows", async () => {
+  render(<App />);
+  await screen.findByRole("table");
+
+  searchFor("pay_404");
+
+  expect(await screen.findByRole("alert")).toHaveTextContent(I18N.PAYMENT_NOT_FOUND);
+  expect(screen.queryByRole("table")).not.toBeInTheDocument();
+});
+
+test("clearing after an error brings the table back", async () => {
+  render(<App />);
+  await screen.findByRole("table");
+
+  searchFor("pay_404");
+  await screen.findByRole("alert");
+
+  fireEvent.click(screen.getByRole("button", { name: I18N.CLEAR_FILTERS }));
+
+  expect(await screen.findByRole("table")).toBeInTheDocument();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 });

@@ -1,14 +1,15 @@
-import { Container, EmptyBox, Spinner, Title } from "./components";
+import { Container, EmptyBox, ErrorBox, Spinner, Title } from "./components";
 import { I18N } from "../constants/i18n";
 import { useAppSelector } from "../store/hooks";
 import { selectPaymentQueryArgs } from "../features/payments/paymentFiltersSlice";
 import { useGetPaymentsQuery } from "../features/payments/paymentsApi";
+import { getErrorMessage } from "../utils/errors";
 import { PaymentsTable } from "./PaymentsTable";
 import { PaymentsFilters } from "./PaymentsFilters";
 
 export const PaymentsPage = () => {
   const queryArgs = useAppSelector(selectPaymentQueryArgs);
-  const { data, isLoading, isFetching } = useGetPaymentsQuery(queryArgs);
+  const { data, error, isLoading, isFetching, isError } = useGetPaymentsQuery(queryArgs);
 
   let content = null;
 
@@ -19,6 +20,8 @@ export const PaymentsPage = () => {
         <span className="sr-only">{I18N.LOADING}</span>
       </div>
     );
+  } else if (isError) {
+    content = <ErrorBox role="alert">{getErrorMessage(error)}</ErrorBox>;
   } else if (data && data.payments.length === 0) {
     content = <EmptyBox>{I18N.NO_PAYMENTS_FOUND}</EmptyBox>;
   } else if (data) {
