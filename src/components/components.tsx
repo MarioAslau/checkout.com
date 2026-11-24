@@ -87,6 +87,11 @@ export const SearchButton = styled.button`
   &:hover {
     background-color: rgb(33, 65, 154);
   }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+  }
 `;
 
 export const ClearButton = styled.button`
@@ -98,6 +103,11 @@ export const ClearButton = styled.button`
 
   &:hover {
     background-color: #4b5563;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
   }
 `;
 
@@ -111,6 +121,11 @@ export const DefaultButton = styled.button`
   &:hover {
     background-color: rgb(79, 85, 100);
   }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+  }
 `;
 
 export const TableWrapper = styled.div`
@@ -123,7 +138,7 @@ export const TableWrapper = styled.div`
 
 export const Table = styled.table`
   min-width: 100%;
-  text-sm: 14px;
+  font-size: 0.875rem;
   text-align: left;
 `;
 
@@ -147,16 +162,16 @@ export const TableCell = styled.td`
   color: #4b5563;
 `;
 
-export const StatusBadge = styled.span<{ status: string }>`
+export const StatusBadge = styled.span<{ $status: string }>`
   padding: 0.25rem 0.75rem;
   border-radius: 0.375rem;
   font-size: 0.75rem;
   font-weight: 600;
 
   ${(props) =>
-    props.status === "completed"
+    props.$status === "completed"
       ? `background-color: #d1fae5; color: #15803d;`
-      : props.status === "pending"
+      : props.$status === "pending"
       ? `background-color: #fef3c7; color: #92400e;`
       : `background-color: #fee2e2; color: #b91c1c;`}
 `;
